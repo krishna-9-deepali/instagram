@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { Outlet } from "react-router-dom";
+import { Sidebar, Container } from "./components/index";
+import { useDispatch, useSelector } from "react-redux";
+import { Login, Navbar } from "./components/index";
+import { login } from "./store/authslice";
+import authservice from "./appwrite/auth";
+import { useEffect } from "react";
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("authToken"));
+    console.log("local", userData);
+    if (userData) {
+      console.log("local storage", userData);
+      dispatch(login({ userData }));
+    } else {
+      dispatch(logout());
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("inside app");
+  //   authservice
+  //     .getCurrentUser()
+  //     .then((userData) => {
+  //       if (userData) {
+  //         dispatch(login({ userData }));
+  //       } else {
+  //         dispatch(logout());
+  //       }
+  //     })
+  //     .finally();
+  // }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar></Navbar>
+      <main>
+        <Container>
+          <Sidebar />
+          <div className="  w-full mx-10 marginleft  outlet min-h-full">
+            <Outlet />
+          </div>
+        </Container>
+
+        {/* if status false */}
+        {/* only want login page at starting and footer on login land to home */}
+        {/* if satus true */}
+      </main>
+      {/* <Footer />   */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
