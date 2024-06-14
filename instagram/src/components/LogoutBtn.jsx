@@ -10,6 +10,7 @@ function LogoutBtn() {
   const logoutHandler = () => {
     authService.logout().then(() => {
       dispatch(logout());
+      localStorage.removeItem("authToken"); // Remove the token from localStorage
       navigate("/login");
     });
   };
