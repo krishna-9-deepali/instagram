@@ -26,7 +26,7 @@ function Login() {
         if (userData) {
           localStorage.setItem("authToken", JSON.stringify(userData));
           dispatch(authLogin(userData));
-          navigate("/home");
+          navigate("/");
         }
       }
     } catch (error) {

@@ -20,6 +20,7 @@ function Signup() {
       console.log(userData);
       if (userData) {
         const userData = await authService.getCurrentUser();
+        localStorage.setItem("authToken", JSON.stringify(userData));
         if (userData) dispatch(login(userData));
         navigate("/");
       }
